@@ -1,0 +1,15 @@
+{
+  "groups": [{
+    "name": "storage",
+    "type": "invoice.parser.storage.StorageProperties",
+    "sourceType": "invoice.parser.storage.StorageProperties"
+  }],
+  "properties": [{
+    "name": "storage.location",
+    "type": "java.lang.String",
+    "description": "Folder location for storing files",
+    "sourceType": "invoice.parser.storage.StorageProperties",
+    "defaultValue": "upload-dir"
+  }],
+  "hints": []
+}
