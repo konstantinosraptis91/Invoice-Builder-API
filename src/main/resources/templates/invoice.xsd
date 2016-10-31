@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://www.w3schools.com" xmlns="http://www.w3schools.com" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	
+	<xs:element name="INVOICE">
+		<xs:complexType>
+			<xs:sequence>
+				<!-- CUSTOMER ELEMENT -->
+				<xs:element name="CUSTOMER">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ID" type="xs:positiveInteger"/>
+							<xs:element name="FULL_NAME" type="xs:string"/>
+							<xs:element name="ADDRESS" type="xs:string"/>
+							<xs:element name="PHONE_NUMBER" type="xs:string"/>
+							<xs:element name="E_MAIL" type="xs:string"/>
+						</xs:sequence>	
+					</xs:complexType>
+				</xs:element>
+				<!-- ORDER ELEMENT -->
+				<xs:element name="ORDER">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ID" type="xs:positiveInteger"/>
+							<xs:element name="PRODUCT" type="xs:string"/>
+							<xs:element name="TOTAL_COST" type="xs:decimal"/>
+							<xs:element name="SHIPPING_DATE" type="xs:string"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<!-- SUPPLIER ELEMENT -->
+				<xs:element name="SUPPLIER">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ID" type="xs:positiveInteger"/>
+							<xs:element name="FULL_NAME" type="xs:string"/>
+							<xs:element name="ADDRESS" type="xs:string"/>
+							<xs:element name="PHONE_NUMBER" type="xs:string"/>
+							<xs:element name="E_MAIL" type="xs:string"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<!-- TRANSPORTER ELEMENT -->
+				<xs:element name="TRANSPORTER">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ID" type="xs:positiveInteger"/>
+							<xs:element name="NAME" type="xs:string"/>
+							<xs:element name="ADDRESS" type="xs:string"/>
+							<xs:element name="PHONE_NUMBER" type="xs:string"/>
+							<xs:element name="E_MAIL" type="xs:string"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>	
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>
