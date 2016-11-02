@@ -345,6 +345,11 @@ public class Form {
             this.email = value;
         }
 
+        @Override
+        public String toString() {
+            return "Customer{" + "fullName=" + fullName + ", address=" + address + ", phoneNumber=" + phoneNumber + ", email=" + email + '}';
+        }
+        
     }
 
 
@@ -486,6 +491,11 @@ public class Form {
             this.shippingDate = value;
         }
 
+        @Override
+        public String toString() {
+            return "Order{" + "product=" + product + ", quantity=" + quantity + ", unitCost=" + unitCost + ", shippingDate=" + shippingDate + '}';
+        }
+        
     }
 
 
@@ -625,6 +635,11 @@ public class Form {
             this.email = value;
         }
 
+        @Override
+        public String toString() {
+            return "Supplier{" + "fullName=" + fullName + ", address=" + address + ", phoneNumber=" + phoneNumber + ", email=" + email + '}';
+        }
+                
     }
 
 
@@ -764,6 +779,11 @@ public class Form {
             this.email = value;
         }
 
+        @Override
+        public String toString() {
+            return "Transporter{" + "name=" + name + ", address=" + address + ", phoneNumber=" + phoneNumber + ", email=" + email + '}';
+        }
+       
     }
     
 }
