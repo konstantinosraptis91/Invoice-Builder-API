@@ -6,14 +6,16 @@
 package invoice.parser.service;
 
 import invoice.parser.dao.interfaces.ISupplierDao;
-import invoice.parser.entity.Supplier;
+import invoice.parser.entity.Form.Supplier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author konstantinos
  */
+@Service
 public class SupplierService {
     
     @Autowired

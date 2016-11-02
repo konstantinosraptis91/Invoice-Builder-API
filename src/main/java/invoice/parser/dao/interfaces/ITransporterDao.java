@@ -5,7 +5,7 @@
  */
 package invoice.parser.dao.interfaces;
 
-import invoice.parser.entity.Transporter;
+import invoice.parser.entity.Form.Transporter;
 
 /**
  *

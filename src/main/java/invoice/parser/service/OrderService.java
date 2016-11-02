@@ -6,14 +6,16 @@
 package invoice.parser.service;
 
 import invoice.parser.dao.interfaces.IOrderDao;
-import invoice.parser.entity.Order;
+import invoice.parser.entity.Form.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author konstantinos
  */
+@Service
 public class OrderService {
     
     @Autowired
