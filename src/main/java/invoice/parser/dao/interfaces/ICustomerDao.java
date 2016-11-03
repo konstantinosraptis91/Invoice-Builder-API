@@ -6,6 +6,7 @@
 package invoice.parser.dao.interfaces;
 
 import invoice.parser.entity.Form.Customer;
+import java.util.List;
 
 
 
@@ -15,8 +16,10 @@ import invoice.parser.entity.Form.Customer;
  */
 public interface ICustomerDao {
     
-    void addCustomer(Customer customer);
+    int addCustomer(Customer customer);
     
     Customer getCustomerById(int id);
+    
+    List<Customer> getCustomers();
     
 }

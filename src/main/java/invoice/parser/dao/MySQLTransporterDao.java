@@ -7,14 +7,22 @@ package invoice.parser.dao;
 
 import invoice.parser.dao.interfaces.ITransporterDao;
 import invoice.parser.entity.Form.Transporter;
+import invoice.parser.entity.ObjectFactory;
 import invoice.parser.util.Constants;
 import invoice.parser.util.MySQLHelper;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -31,23 +39,59 @@ public class MySQLTransporterDao implements ITransporterDao {
     private JdbcTemplate jdbcTemplate;
     
     @Override
-    public void addTransporter(Transporter transporter) {
-        jdbcTemplate.batchUpdate("INSERT INTO " + MySQLHelper.TRANSPORTER_TABLE + " ("
-            + MySQLHelper.TRANSPORTER_NAME + ","
-            + MySQLHelper.TRANSPORTER_ADDRESS + ","
-            + MySQLHelper.TRANSPORTER_PHONE_NUMBER + ","
-            + MySQLHelper.TRANSPORTER_EMAIL + ") "
-            + "VALUES ('"
-            + transporter.getName() + "','"
-            + transporter.getAddress() + "','" 
-            + transporter.getPhoneNumber() + "','"
-            + transporter.getEmail() + "')");
+    public int addTransporter(Transporter transporter) {
+        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
+        jdbcInsert.withTableName(MySQLHelper.TRANSPORTER_TABLE).usingGeneratedKeyColumns(MySQLHelper.TRANSPORTER_ID);
+        Map<String, Object> params = new HashMap<>();
+        params.put(MySQLHelper.TRANSPORTER_NAME, transporter.getName());
+        params.put(MySQLHelper.TRANSPORTER_ADDRESS, transporter.getAddress());
+        params.put(MySQLHelper.TRANSPORTER_PHONE_NUMBER, transporter.getPhoneNumber());
+        params.put(MySQLHelper.TRANSPORTER_EMAIL, transporter.getEmail());
+        Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(params));
         LOGGER.info(transporter + " added successfully.", Constants.LOG_DATE_FORMAT.format(new Date()));
+        return key.intValue();
     }
 
     @Override
     public Transporter getTransporterById(int id) {
-        return null;
+        ObjectFactory objectFactory = new ObjectFactory();
+        Transporter transporter = objectFactory.createFormTransporter();
+        try {
+            transporter = (Transporter) jdbcTemplate.queryForObject("SELECT * FROM " 
+                    + MySQLHelper.TRANSPORTER_TABLE + " WHERE " 
+                    + MySQLHelper.TRANSPORTER_ID + " = " + "'" + id + "'", 
+                    (rs, rowNum) -> {
+                        Transporter t = objectFactory.createFormTransporter();
+                        t.setName(rs.getString(MySQLHelper.TRANSPORTER_NAME));
+                        t.setAddress(rs.getString(MySQLHelper.TRANSPORTER_ADDRESS));
+                        t.setPhoneNumber(rs.getString(MySQLHelper.TRANSPORTER_PHONE_NUMBER));
+                        t.setEmail(rs.getString(MySQLHelper.TRANSPORTER_EMAIL));
+                        return t;
+                    });
+        } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage(), Constants.LOG_DATE_FORMAT.format(new Date()));
+        }
+        return transporter;
+    }
+
+    @Override
+    public List<Transporter> getTransporters() {
+        ObjectFactory objectFactory = new ObjectFactory();
+        List<Transporter> transporters = new ArrayList<>();
+        try {
+            transporters = jdbcTemplate.query("SELECT * FROM " + MySQLHelper.TRANSPORTER_TABLE, 
+                    (rs, rowNum) -> {
+                        Transporter t = objectFactory.createFormTransporter();
+                        t.setName(rs.getString(MySQLHelper.TRANSPORTER_NAME));
+                        t.setAddress(rs.getString(MySQLHelper.TRANSPORTER_ADDRESS));
+                        t.setPhoneNumber(rs.getString(MySQLHelper.TRANSPORTER_PHONE_NUMBER));
+                        t.setEmail(rs.getString(MySQLHelper.TRANSPORTER_EMAIL));
+                        return t;
+                    });
+        } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage(), Constants.LOG_DATE_FORMAT.format(new Date()));
+        }
+        return transporters;
     }
       
 }

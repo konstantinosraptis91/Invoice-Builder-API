@@ -7,6 +7,7 @@ package invoice.parser.service;
 
 import invoice.parser.dao.interfaces.IOrderDao;
 import invoice.parser.entity.Form.Order;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -22,12 +23,16 @@ public class OrderService {
     @Qualifier("MySQLOrder")
     private IOrderDao orderDao;
     
-    public void addOrder(Order order) {
-        orderDao.addOrder(order);
+    public int addOrder(Order order) {
+        return orderDao.addOrder(order);
     }
     
     public Order getOrderById(int id) {
         return orderDao.getOrderById(id);
+    }
+    
+    public List<Order> getOrders() {
+        return orderDao.getOrders();
     }
     
 }

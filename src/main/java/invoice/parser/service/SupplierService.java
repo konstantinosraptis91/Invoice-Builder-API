@@ -7,6 +7,7 @@ package invoice.parser.service;
 
 import invoice.parser.dao.interfaces.ISupplierDao;
 import invoice.parser.entity.Form.Supplier;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -22,12 +23,16 @@ public class SupplierService {
     @Qualifier("MySQLSupplier")
     private ISupplierDao supplierDao;
     
-    public void addSupplier(Supplier supplier) {
-        supplierDao.addSupplier(supplier);
+    public int addSupplier(Supplier supplier) {
+        return supplierDao.addSupplier(supplier);
     }
     
     public Supplier getSupplierById(int id) {
         return supplierDao.getSupplierById(id);
+    }
+    
+    public List<Supplier> getSuppliers() {
+        return supplierDao.getSuppliers();
     }
     
 }

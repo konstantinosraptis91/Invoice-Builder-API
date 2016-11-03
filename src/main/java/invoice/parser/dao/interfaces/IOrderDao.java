@@ -6,6 +6,7 @@
 package invoice.parser.dao.interfaces;
 
 import invoice.parser.entity.Form.Order;
+import java.util.List;
 
 /**
  *
@@ -13,8 +14,10 @@ import invoice.parser.entity.Form.Order;
  */
 public interface IOrderDao {
     
-    void addOrder(Order order);
+    int addOrder(Order order);
     
     Order getOrderById(int id);
+    
+    List<Order> getOrders();
     
 }

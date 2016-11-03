@@ -5,12 +5,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
       <group>
-        <file>file:/E:/NetbeansProjects/Invoice%20Parser/src/main/java/invoice/parser/dao/MySQLCustomerDao.java</file>
-        <file>file:/E:/NetbeansProjects/Invoice%20Parser/build.gradle</file>
-        <file>file:/E:/NetbeansProjects/Invoice%20Parser/src/main/java/invoice/parser/Application.java</file>
-        <file>file:/E:/NetbeansProjects/Invoice%20Parser/src/main/resources/application.properties</file>
+        <file>file:/E:/NetbeansProjects/Invoice%20Parser/src/main/java/invoice/parser/controller/FormController.java</file>
       </group>
     </open-files>
     <editor-bookmarks lastBookmarkId="0" xmlns="http://www.netbeans.org/ns/editor-bookmarks/2"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+      <group>
+        <file>file:/E:/NetbeansProjects/Invoice%20Parser/src/main/java/invoice/parser/controller/FormController.java</file>
+      </group>
+    </open-files>
   </auxiliary>
 </gradle-project-properties>

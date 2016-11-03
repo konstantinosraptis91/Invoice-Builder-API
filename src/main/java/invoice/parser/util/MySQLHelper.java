@@ -5,8 +5,6 @@
  */
 package invoice.parser.util;
 
-import invoice.parser.entity.Form.Customer;
-
 /**
  *
  * @author konstantinos
@@ -18,7 +16,8 @@ public class MySQLHelper {
     public static final String ORDER_TABLE = "_order";
     public static final String SUPPLIER_TABLE = "_supplier";
     public static final String TRANSPORTER_TABLE = "_transporter";
-
+    public static final String FORM_TABLE = "_form";
+    
     // customer table attributes
     public static final String CUSTOMER_ID = "customer_id";
     public static final String CUSTOMER_FULL_NAME = "customer_fullname";
@@ -46,5 +45,8 @@ public class MySQLHelper {
     public static final String TRANSPORTER_ADDRESS = "transporter_address";
     public static final String TRANSPORTER_PHONE_NUMBER = "transporter_phonenumber";
     public static final String TRANSPORTER_EMAIL = "transporter_email";
+    
+    // form table attributes
+    public static final String FORM_ID = "form_id";
     
 }
