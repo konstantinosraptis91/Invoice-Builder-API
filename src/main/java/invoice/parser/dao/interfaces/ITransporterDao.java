@@ -6,6 +6,7 @@
 package invoice.parser.dao.interfaces;
 
 import invoice.parser.entity.Form.Transporter;
+import invoice.parser.entity.Invoice.ITransporter;
 import java.util.List;
 
 /**
@@ -17,6 +18,8 @@ public interface ITransporterDao {
     int addTransporter(Transporter transporter);
     
     Transporter getTransporterById(int id);
+    
+    ITransporter getITransporterById(int id);
     
     List<Transporter> getTransporters();
     

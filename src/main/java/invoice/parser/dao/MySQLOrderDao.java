@@ -8,6 +8,7 @@ package invoice.parser.dao;
 import invoice.parser.dao.interfaces.IOrderDao;
 import invoice.parser.entity.Form;
 import invoice.parser.entity.Form.Order;
+import invoice.parser.entity.Invoice;
 import invoice.parser.entity.ObjectFactory;
 import invoice.parser.util.Constants;
 import invoice.parser.util.MySQLHelper;
@@ -58,7 +59,7 @@ public class MySQLOrderDao implements IOrderDao {
         LOGGER.info(order + " added successfully.", Constants.LOG_DATE_FORMAT.format(new Date()));
         return key.intValue();
     }
-
+   
     @Override
     public Order getOrderById(int id) {
         ObjectFactory objectFactory = new ObjectFactory();
@@ -92,6 +93,31 @@ public class MySQLOrderDao implements IOrderDao {
         return order;
     }
 
+    @Override
+    public Invoice.IOrder getIOrderById(int id) {
+        Invoice.IOrder iOrder = new Invoice.IOrder();
+        try {
+            iOrder = (Invoice.IOrder) jdbcTemplate.queryForObject("SELECT * FROM " 
+                    + MySQLHelper.ORDER_TABLE + " WHERE " 
+                    + MySQLHelper.ORDER_ID + " = " + "'" + id + "'", 
+                    (rs, rowNum) -> {
+                        Invoice.IOrder io = new Invoice.IOrder();
+                        io.setId(rs.getInt(MySQLHelper.ORDER_ID));
+                        io.setProduct(rs.getString(MySQLHelper.ORDER_PRODUCT));
+                        int quantity = rs.getInt(MySQLHelper.ORDER_QUANTITY);
+                        float unitCost = rs.getFloat(MySQLHelper.ORDER_UNIT_COST);
+                        io.setTotalCost(quantity * unitCost);
+                        io.setShippingDate(Constants.INVOICE_DATE_FORMAT.format(
+                                rs.getDate(MySQLHelper.ORDER_SHIPPING_DATE))
+                        );
+                        return io;
+                    });
+        } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage(), Constants.LOG_DATE_FORMAT.format(new Date()));
+        }
+        return iOrder;
+    }
+   
     @Override
     public List<Order> getOrders() {
         ObjectFactory objectFactory = new ObjectFactory();

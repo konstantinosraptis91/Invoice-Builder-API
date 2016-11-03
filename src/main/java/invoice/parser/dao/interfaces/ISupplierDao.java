@@ -6,6 +6,7 @@
 package invoice.parser.dao.interfaces;
 
 import invoice.parser.entity.Form.Supplier;
+import invoice.parser.entity.Invoice.ISupplier;
 import java.util.List;
 
 /**
@@ -17,6 +18,8 @@ public interface ISupplierDao {
     int addSupplier(Supplier supplier);
     
     Supplier getSupplierById(int id);
+    
+    ISupplier getISupplierById(int id);
     
     List<Supplier> getSuppliers();
     

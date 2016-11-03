@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  * @author konstantinos
  */
 @XmlRootElement(name = "forms")
-@XmlSeeAlso({Form.class})
+@XmlSeeAlso({Form.class, Invoice.class})
 public class EntityList<T> {
 
     private final List<T> listOfEntityObjects;

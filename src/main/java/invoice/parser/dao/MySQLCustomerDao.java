@@ -7,6 +7,7 @@ package invoice.parser.dao;
 
 import invoice.parser.dao.interfaces.ICustomerDao;
 import invoice.parser.entity.Form.Customer;
+import invoice.parser.entity.Invoice;
 import invoice.parser.entity.ObjectFactory;
 import invoice.parser.util.Constants;
 import invoice.parser.util.MySQLHelper;
@@ -74,6 +75,27 @@ public class MySQLCustomerDao implements ICustomerDao {
     }
 
     @Override
+    public Invoice.ICustomer getICustomerById(int id) {
+        Invoice.ICustomer iCustomer = new Invoice.ICustomer();
+        try {
+            iCustomer = (Invoice.ICustomer) jdbcTemplate.queryForObject("SELECT * FROM " 
+                    + MySQLHelper.CUSTOMER_TABLE + " WHERE " + MySQLHelper.CUSTOMER_ID + " = " + "'" + id + "'", 
+                    (rs, rowNum) -> {
+                        Invoice.ICustomer ic = new Invoice.ICustomer();
+                        ic.setId(rs.getInt(MySQLHelper.CUSTOMER_ID));
+                        ic.setFullName(rs.getString(MySQLHelper.CUSTOMER_FULL_NAME));
+                        ic.setAddress(rs.getString(MySQLHelper.CUSTOMER_ADDRESS));
+                        ic.setPhoneNumber(rs.getString(MySQLHelper.CUSTOMER_PHONE_NUMBER));
+                        ic.setEmail(rs.getString(MySQLHelper.CUSTOMER_EMAIL));
+                        return ic;
+                    });
+        } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage(), Constants.LOG_DATE_FORMAT.format(new Date()));
+        }
+        return iCustomer;
+    }
+    
+    @Override
     public List<Customer> getCustomers() {
         ObjectFactory objectFactory = new ObjectFactory();
         List<Customer> customers = new ArrayList<>();
@@ -92,5 +114,5 @@ public class MySQLCustomerDao implements ICustomerDao {
         }
         return customers;
     }
-    
+   
 }

@@ -7,6 +7,7 @@ package invoice.parser.dao;
 
 import invoice.parser.dao.interfaces.ISupplierDao;
 import invoice.parser.entity.Form.Supplier;
+import invoice.parser.entity.Invoice;
 import invoice.parser.entity.ObjectFactory;
 import invoice.parser.util.Constants;
 import invoice.parser.util.MySQLHelper;
@@ -74,6 +75,28 @@ public class MySQLSupplierDao implements ISupplierDao {
         return supplier;
     }
 
+    @Override
+    public Invoice.ISupplier getISupplierById(int id) {
+        Invoice.ISupplier iSupplier = new Invoice.ISupplier();
+        try {
+            iSupplier = (Invoice.ISupplier) jdbcTemplate.queryForObject("SELECT * FROM " 
+                    + MySQLHelper.SUPPLIER_TABLE + " WHERE " 
+                    + MySQLHelper.SUPPLIER_ID + " = " + "'" + id + "'", 
+                    (rs, rowNum) -> {
+                        Invoice.ISupplier is = new Invoice.ISupplier();
+                        is.setId(rs.getInt(MySQLHelper.SUPPLIER_ID));
+                        is.setFullName(rs.getString(MySQLHelper.SUPPLIER_FULL_NAME));
+                        is.setAddress(rs.getString(MySQLHelper.SUPPLIER_ADDRESS));
+                        is.setPhoneNumber(rs.getString(MySQLHelper.SUPPLIER_PHONE_NUMBER));
+                        is.setEmail(rs.getString(MySQLHelper.SUPPLIER_EMAIL));
+                        return is;
+                    });
+        } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage(), Constants.LOG_DATE_FORMAT.format(new Date()));
+        }
+        return iSupplier;
+    }
+   
     @Override
     public List<Supplier> getSuppliers() {
         ObjectFactory objectFactory = new ObjectFactory();

@@ -7,6 +7,7 @@ package invoice.parser.dao;
 
 import invoice.parser.dao.interfaces.ITransporterDao;
 import invoice.parser.entity.Form.Transporter;
+import invoice.parser.entity.Invoice;
 import invoice.parser.entity.ObjectFactory;
 import invoice.parser.util.Constants;
 import invoice.parser.util.MySQLHelper;
@@ -74,6 +75,28 @@ public class MySQLTransporterDao implements ITransporterDao {
         return transporter;
     }
 
+    @Override
+    public Invoice.ITransporter getITransporterById(int id) {
+        Invoice.ITransporter iTransporter = new Invoice.ITransporter();
+        try {
+            iTransporter = (Invoice.ITransporter) jdbcTemplate.queryForObject("SELECT * FROM " 
+                    + MySQLHelper.TRANSPORTER_TABLE + " WHERE " 
+                    + MySQLHelper.TRANSPORTER_ID + " = " + "'" + id + "'", 
+                    (rs, rowNum) -> {
+                        Invoice.ITransporter it = new Invoice.ITransporter();
+                        it.setId(rs.getInt(MySQLHelper.TRANSPORTER_ID));
+                        it.setName(rs.getString(MySQLHelper.TRANSPORTER_NAME));
+                        it.setAddress(rs.getString(MySQLHelper.TRANSPORTER_ADDRESS));
+                        it.setPhoneNumber(rs.getString(MySQLHelper.TRANSPORTER_PHONE_NUMBER));
+                        it.setEmail(rs.getString(MySQLHelper.TRANSPORTER_EMAIL));
+                        return it;
+                    });
+        } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage(), Constants.LOG_DATE_FORMAT.format(new Date()));
+        }
+        return iTransporter;
+    }
+   
     @Override
     public List<Transporter> getTransporters() {
         ObjectFactory objectFactory = new ObjectFactory();
