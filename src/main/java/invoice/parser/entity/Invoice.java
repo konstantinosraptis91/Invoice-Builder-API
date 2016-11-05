@@ -81,13 +81,18 @@ public class Invoice {
 
         @XmlAttribute(required = true)
         protected int id;
-                
+
         public int getId() {
             return id;
         }
 
         public void setId(int id) {
             this.id = id;
+        }
+
+        @Override
+        public String toString() {
+            return "ICustomer{" + "id=" + id + "fullName=" + fullName + ", address=" + address + ", phoneNumber=" + phoneNumber + ", email=" + email + '}';
         }
 
     }
@@ -147,7 +152,7 @@ public class Invoice {
         }
 
     }
-    
+
     public static class ISupplier extends Form.Supplier {
 
         @XmlAttribute(required = true)
@@ -161,19 +166,30 @@ public class Invoice {
             this.id = id;
         }
 
+        @Override
+        public String toString() {
+            return "ISupplier{" + "id=" + id + "fullName=" + fullName + ", address=" + address + ", phoneNumber=" + phoneNumber + ", email=" + email + '}';
+        }
+
     }
-    
+
     public static class ITransporter extends Form.Transporter {
 
         @XmlAttribute(required = true)
         protected int id;
-        
+
         public int getId() {
             return id;
         }
 
         public void setId(int id) {
             this.id = id;
+        }
+
+        @Override
+        public String toString() {
+            return "ITransporter{" + "id=" + id + ", name=" + name + ", address=" + address + ", phoneNumber=" + phoneNumber + ", email=" + email + '}';
+
         }
 
     }

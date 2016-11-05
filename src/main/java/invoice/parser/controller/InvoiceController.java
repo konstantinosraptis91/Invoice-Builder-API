@@ -7,7 +7,9 @@ package invoice.parser.controller;
 
 import invoice.parser.entity.EntityList;
 import invoice.parser.entity.Invoice;
+import invoice.parser.entity.InvoiceList;
 import invoice.parser.service.InvoiceService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,10 +34,24 @@ public class InvoiceController {
         return invoiceService.getInvoiceById(id);
     }
     
+//    @RequestMapping(method = RequestMethod.GET,
+//            produces = MediaType.APPLICATION_XML_VALUE)
+//    public EntityList<Invoice> getInvoices() {
+//        return new EntityList<>(invoiceService.getInvoices());
+//    }
+    
     @RequestMapping(method = RequestMethod.GET,
             produces = MediaType.APPLICATION_XML_VALUE)
-    public EntityList<Invoice> getInvoices() {
-        return new EntityList<>(invoiceService.getInvoices());
+    public InvoiceList getInvoices() {
+        InvoiceList invoiceList = new InvoiceList();
+        invoiceService.getInvoices().stream().forEach(i -> invoiceList.getInvoices().add(i));
+        return invoiceList;
     }
+    
+//    @RequestMapping(method = RequestMethod.GET,
+//            produces = MediaType.APPLICATION_JSON_VALUE)
+//    public List<Invoice> getInvoices() {
+//        return invoiceService.getInvoices();
+//    }
     
 }
