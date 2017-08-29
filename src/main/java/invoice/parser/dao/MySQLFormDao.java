@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package invoice.parser.dao;
 
-import invoice.parser.dao.interfaces.IFormDao;
 import invoice.parser.entity.Form;
 import invoice.parser.entity.Form.Customer;
 import invoice.parser.entity.Form.Order;
@@ -13,7 +7,6 @@ import invoice.parser.entity.Form.Supplier;
 import invoice.parser.entity.Form.Transporter;
 import invoice.parser.entity.ObjectFactory;
 import invoice.parser.util.Constants;
-import invoice.parser.util.MySQLHelper;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -35,7 +28,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @Qualifier("MySQLForm")
-public class MySQLFormDao implements IFormDao {
+public class MySQLFormDao implements FormDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MySQLFormDao.class);
     @Autowired
@@ -53,12 +46,12 @@ public class MySQLFormDao implements IFormDao {
     @Override
     public int addForm(int customerId, int orderId, int supplierId, int transporterId) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        jdbcInsert.withTableName(MySQLHelper.FORM_TABLE).usingGeneratedKeyColumns(MySQLHelper.FORM_ID);
+        jdbcInsert.withTableName(TABLE_FORM).usingGeneratedKeyColumns(ID);
         Map<String, Object> params = new HashMap<>();
-        params.put(MySQLHelper.TRANSPORTER_ID, transporterId);
-        params.put(MySQLHelper.CUSTOMER_ID, customerId);
-        params.put(MySQLHelper.ORDER_ID, orderId);
-        params.put(MySQLHelper.SUPPLIER_ID, supplierId);
+        params.put(CUSTOMER_ID, customerId);
+        params.put(TRANSPORTER_ID, transporterId);
+        params.put(ORDER_ID, orderId);
+        params.put(SUPPLIER_ID, supplierId);
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(params));
         LOGGER.info("form added successfully.", Constants.LOG_DATE_FORMAT.format(new Date()));
         return key.intValue();
@@ -70,14 +63,14 @@ public class MySQLFormDao implements IFormDao {
         Form form = objectFactory.createForm();
         try {
             form = (Form) jdbcTemplate.queryForObject("SELECT * FROM " 
-                    + MySQLHelper.FORM_TABLE + " WHERE " 
-                    + MySQLHelper.FORM_ID + " = " + "'" + id + "'", 
+                    + TABLE_FORM + " WHERE " 
+                    + ID + " = " + "'" + id + "'", 
                     (rs, rowNum) -> {
                         Form f = objectFactory.createForm();
-                        Transporter t = mySQLTransporterDao.getTransporterById(rs.getInt(MySQLHelper.TRANSPORTER_ID));
-                        Customer c = mySQLCustomerDao.getCustomerById(rs.getInt(MySQLHelper.CUSTOMER_ID));
-                        Order o = mySQLOrderDao.getOrderById(rs.getInt(MySQLHelper.ORDER_ID));
-                        Supplier s = mySQLSupplierDao.getSupplierById(rs.getInt(MySQLHelper.SUPPLIER_ID));
+                        Customer c = mySQLCustomerDao.getCustomerById(rs.getInt(CUSTOMER_ID));
+                        Transporter t = mySQLTransporterDao.getTransporterById(rs.getInt(TRANSPORTER_ID));
+                        Order o = mySQLOrderDao.getOrderById(rs.getInt(ORDER_ID));
+                        Supplier s = mySQLSupplierDao.getSupplierById(rs.getInt(SUPPLIER_ID));
                         f.setTransporter(t);
                         f.setCustomer(c);
                         f.setOrder(o);
@@ -95,13 +88,13 @@ public class MySQLFormDao implements IFormDao {
         ObjectFactory objectFactory = new ObjectFactory();
         List<Form> forms = new ArrayList<>();
         try {
-            forms = jdbcTemplate.query("SELECT * FROM " + MySQLHelper.FORM_TABLE, 
+            forms = jdbcTemplate.query("SELECT * FROM " + TABLE_FORM, 
                     (rs, rowNum) -> {
                         Form f = objectFactory.createForm();
-                        Transporter t = mySQLTransporterDao.getTransporterById(rs.getInt(MySQLHelper.TRANSPORTER_ID));
-                        Customer c = mySQLCustomerDao.getCustomerById(rs.getInt(MySQLHelper.CUSTOMER_ID));
-                        Order o = mySQLOrderDao.getOrderById(rs.getInt(MySQLHelper.ORDER_ID));
-                        Supplier s = mySQLSupplierDao.getSupplierById(rs.getInt(MySQLHelper.SUPPLIER_ID));
+                        Customer c = mySQLCustomerDao.getCustomerById(rs.getInt(CUSTOMER_ID));
+                        Transporter t = mySQLTransporterDao.getTransporterById(rs.getInt(TRANSPORTER_ID));
+                        Order o = mySQLOrderDao.getOrderById(rs.getInt(ORDER_ID));
+                        Supplier s = mySQLSupplierDao.getSupplierById(rs.getInt(SUPPLIER_ID));
                         f.setTransporter(t);
                         f.setCustomer(c);
                         f.setOrder(o);

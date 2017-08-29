@@ -1,14 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package invoice.parser.dao;
 
-import invoice.parser.dao.interfaces.IInvoiceDao;
 import invoice.parser.entity.Invoice;
 import invoice.parser.util.Constants;
-import invoice.parser.util.MySQLHelper;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +19,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @Qualifier("MySQLInvoice")
-public class MySQLInvoiceDao implements IInvoiceDao {
+public class MySQLInvoiceDao implements InvoiceDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MySQLInvoiceDao.class);
     @Autowired
@@ -46,15 +39,15 @@ public class MySQLInvoiceDao implements IInvoiceDao {
         Invoice invoice = new Invoice();
         try {
             invoice = (Invoice) jdbcTemplate.queryForObject("SELECT * FROM " 
-                    + MySQLHelper.FORM_TABLE + " WHERE " 
-                    + MySQLHelper.FORM_ID + " = " + "'" + id + "'", 
+                    + FormDao.TABLE_FORM + " WHERE " 
+                    + FormDao.ID + " = " + "'" + id + "'", 
                     (rs, rowNum) -> {
                         Invoice i = new Invoice();
-                        int formId = rs.getInt(MySQLHelper.FORM_ID);
-                        Invoice.ITransporter it = mySQLTransporterDao.getITransporterById(rs.getInt(MySQLHelper.TRANSPORTER_ID));
-                        Invoice.ICustomer ic = mySQLCustomerDao.getICustomerById(rs.getInt(MySQLHelper.CUSTOMER_ID));
-                        Invoice.IOrder io = mySQLOrderDao.getIOrderById(rs.getInt(MySQLHelper.ORDER_ID));
-                        Invoice.ISupplier is = mySQLSupplierDao.getISupplierById(rs.getInt(MySQLHelper.SUPPLIER_ID));
+                        int formId = rs.getInt(FormDao.ID);
+                        Invoice.ICustomer ic = mySQLCustomerDao.getICustomerById(rs.getInt(FormDao.CUSTOMER_ID));
+                        Invoice.ITransporter it = mySQLTransporterDao.getITransporterById(rs.getInt(FormDao.TRANSPORTER_ID));
+                        Invoice.IOrder io = mySQLOrderDao.getIOrderById(rs.getInt(FormDao.ORDER_ID));
+                        Invoice.ISupplier is = mySQLSupplierDao.getISupplierById(rs.getInt(FormDao.SUPPLIER_ID));
                         i.setId(formId);
                         i.setTransporter(it);
                         i.setCustomer(ic);
@@ -72,14 +65,14 @@ public class MySQLInvoiceDao implements IInvoiceDao {
     public List<Invoice> getInvoices() {
         List<Invoice> invoices = new ArrayList<>();
         try {
-            invoices = jdbcTemplate.query("SELECT * FROM " + MySQLHelper.FORM_TABLE, 
+            invoices = jdbcTemplate.query("SELECT * FROM " + FormDao.TABLE_FORM, 
                     (rs, rowNum) -> {
                         Invoice i = new Invoice();
-                        int formId = rs.getInt(MySQLHelper.FORM_ID);
-                        Invoice.ITransporter it = mySQLTransporterDao.getITransporterById(rs.getInt(MySQLHelper.TRANSPORTER_ID));
-                        Invoice.ICustomer ic = mySQLCustomerDao.getICustomerById(rs.getInt(MySQLHelper.CUSTOMER_ID));
-                        Invoice.IOrder io = mySQLOrderDao.getIOrderById(rs.getInt(MySQLHelper.ORDER_ID));
-                        Invoice.ISupplier is = mySQLSupplierDao.getISupplierById(rs.getInt(MySQLHelper.SUPPLIER_ID));
+                        int formId = rs.getInt(FormDao.ID);
+                        Invoice.ICustomer ic = mySQLCustomerDao.getICustomerById(rs.getInt(FormDao.CUSTOMER_ID));
+                        Invoice.ITransporter it = mySQLTransporterDao.getITransporterById(rs.getInt(FormDao.TRANSPORTER_ID));
+                        Invoice.IOrder io = mySQLOrderDao.getIOrderById(rs.getInt(FormDao.ORDER_ID));
+                        Invoice.ISupplier is = mySQLSupplierDao.getISupplierById(rs.getInt(FormDao.SUPPLIER_ID));
                         i.setId(formId);
                         i.setTransporter(it);
                         i.setCustomer(ic);

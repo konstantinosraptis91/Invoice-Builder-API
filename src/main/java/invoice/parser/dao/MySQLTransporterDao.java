@@ -1,16 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package invoice.parser.dao;
 
-import invoice.parser.dao.interfaces.ITransporterDao;
 import invoice.parser.entity.Form.Transporter;
 import invoice.parser.entity.Invoice;
 import invoice.parser.entity.ObjectFactory;
 import invoice.parser.util.Constants;
-import invoice.parser.util.MySQLHelper;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,7 +25,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @Qualifier("MySQLTransporter")
-public class MySQLTransporterDao implements ITransporterDao {
+public class MySQLTransporterDao implements TransporterDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MySQLTransporterDao.class);
     
@@ -42,12 +35,12 @@ public class MySQLTransporterDao implements ITransporterDao {
     @Override
     public int addTransporter(Transporter transporter) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        jdbcInsert.withTableName(MySQLHelper.TRANSPORTER_TABLE).usingGeneratedKeyColumns(MySQLHelper.TRANSPORTER_ID);
+        jdbcInsert.withTableName(TABLE_TRANSPORTER).usingGeneratedKeyColumns(ID);
         Map<String, Object> params = new HashMap<>();
-        params.put(MySQLHelper.TRANSPORTER_NAME, transporter.getName());
-        params.put(MySQLHelper.TRANSPORTER_ADDRESS, transporter.getAddress());
-        params.put(MySQLHelper.TRANSPORTER_PHONE_NUMBER, transporter.getPhoneNumber());
-        params.put(MySQLHelper.TRANSPORTER_EMAIL, transporter.getEmail());
+        params.put(NAME, transporter.getName());
+        params.put(ADDRESS, transporter.getAddress());
+        params.put(PHONE_NUMBER, transporter.getPhoneNumber());
+        params.put(EMAIL, transporter.getEmail());
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(params));
         LOGGER.info(transporter + " added successfully.", Constants.LOG_DATE_FORMAT.format(new Date()));
         return key.intValue();
@@ -59,14 +52,14 @@ public class MySQLTransporterDao implements ITransporterDao {
         Transporter transporter = objectFactory.createFormTransporter();
         try {
             transporter = (Transporter) jdbcTemplate.queryForObject("SELECT * FROM " 
-                    + MySQLHelper.TRANSPORTER_TABLE + " WHERE " 
-                    + MySQLHelper.TRANSPORTER_ID + " = " + "'" + id + "'", 
+                    + TABLE_TRANSPORTER + " WHERE " 
+                    + ID + " = " + "'" + id + "'", 
                     (rs, rowNum) -> {
                         Transporter t = objectFactory.createFormTransporter();
-                        t.setName(rs.getString(MySQLHelper.TRANSPORTER_NAME));
-                        t.setAddress(rs.getString(MySQLHelper.TRANSPORTER_ADDRESS));
-                        t.setPhoneNumber(rs.getString(MySQLHelper.TRANSPORTER_PHONE_NUMBER));
-                        t.setEmail(rs.getString(MySQLHelper.TRANSPORTER_EMAIL));
+                        t.setName(rs.getString(NAME));
+                        t.setAddress(rs.getString(ADDRESS));
+                        t.setPhoneNumber(rs.getString(PHONE_NUMBER));
+                        t.setEmail(rs.getString(EMAIL));
                         return t;
                     });
         } catch (DataAccessException e) {
@@ -80,15 +73,15 @@ public class MySQLTransporterDao implements ITransporterDao {
         Invoice.ITransporter iTransporter = new Invoice.ITransporter();
         try {
             iTransporter = (Invoice.ITransporter) jdbcTemplate.queryForObject("SELECT * FROM " 
-                    + MySQLHelper.TRANSPORTER_TABLE + " WHERE " 
-                    + MySQLHelper.TRANSPORTER_ID + " = " + "'" + id + "'", 
+                    + TABLE_TRANSPORTER + " WHERE " 
+                    + ID + " = " + "'" + id + "'", 
                     (rs, rowNum) -> {
                         Invoice.ITransporter it = new Invoice.ITransporter();
-                        it.setId(rs.getInt(MySQLHelper.TRANSPORTER_ID));
-                        it.setName(rs.getString(MySQLHelper.TRANSPORTER_NAME));
-                        it.setAddress(rs.getString(MySQLHelper.TRANSPORTER_ADDRESS));
-                        it.setPhoneNumber(rs.getString(MySQLHelper.TRANSPORTER_PHONE_NUMBER));
-                        it.setEmail(rs.getString(MySQLHelper.TRANSPORTER_EMAIL));
+                        it.setId(rs.getInt(ID));
+                        it.setName(rs.getString(NAME));
+                        it.setAddress(rs.getString(ADDRESS));
+                        it.setPhoneNumber(rs.getString(PHONE_NUMBER));
+                        it.setEmail(rs.getString(EMAIL));
                         return it;
                     });
         } catch (DataAccessException e) {
@@ -102,13 +95,13 @@ public class MySQLTransporterDao implements ITransporterDao {
         ObjectFactory objectFactory = new ObjectFactory();
         List<Transporter> transporters = new ArrayList<>();
         try {
-            transporters = jdbcTemplate.query("SELECT * FROM " + MySQLHelper.TRANSPORTER_TABLE, 
+            transporters = jdbcTemplate.query("SELECT * FROM " + TABLE_TRANSPORTER, 
                     (rs, rowNum) -> {
                         Transporter t = objectFactory.createFormTransporter();
-                        t.setName(rs.getString(MySQLHelper.TRANSPORTER_NAME));
-                        t.setAddress(rs.getString(MySQLHelper.TRANSPORTER_ADDRESS));
-                        t.setPhoneNumber(rs.getString(MySQLHelper.TRANSPORTER_PHONE_NUMBER));
-                        t.setEmail(rs.getString(MySQLHelper.TRANSPORTER_EMAIL));
+                        t.setName(rs.getString(NAME));
+                        t.setAddress(rs.getString(ADDRESS));
+                        t.setPhoneNumber(rs.getString(PHONE_NUMBER));
+                        t.setEmail(rs.getString(EMAIL));
                         return t;
                     });
         } catch (DataAccessException e) {

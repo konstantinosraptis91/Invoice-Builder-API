@@ -5,7 +5,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
       <group>
-        <file>file:/E:/NetbeansProjects/Invoice%20Parser/src/main/java/invoice/parser/controller/FormController.java</file>
+        <file>file:/E:/NetbeansProjects/invoice-parser/src/main/java/invoice/parser/controller/FormController.java</file>
+        <file>file:/E:/NetbeansProjects/invoice-parser/src/main/resources/application.properties</file>
+        <file>file:/E:/NetbeansProjects/invoice-parser/src/main/java/invoice/parser/dao/interfaces/ICustomerDao.java</file>
+        <file>file:/E:/NetbeansProjects/invoice-parser/build.gradle</file>
+        <file>file:/E:/NetbeansProjects/invoice-parser/src/main/java/invoice/parser/controller/InvoiceController.java</file>
       </group>
     </open-files>
     <editor-bookmarks lastBookmarkId="0" xmlns="http://www.netbeans.org/ns/editor-bookmarks/2"/>

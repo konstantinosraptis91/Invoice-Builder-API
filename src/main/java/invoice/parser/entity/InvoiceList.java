@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package invoice.parser.entity;
 
 import java.util.ArrayList;
@@ -37,7 +32,5 @@ public class InvoiceList {
     public void setInvoices(List<Invoice> invoices) {
         this.invoices = invoices;
     }
-
-    
 
 }

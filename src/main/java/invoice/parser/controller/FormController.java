@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package invoice.parser.controller;
 
 import invoice.parser.entity.EntityList;
@@ -25,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author konstantinos
  */
 @RestController
-@RequestMapping("/form")
+@RequestMapping("/api/form")
 public class FormController {
     
     @Autowired
@@ -39,7 +34,8 @@ public class FormController {
     @Autowired
     private FormService formService;
     
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_XML_VALUE)
+    @RequestMapping(method = RequestMethod.POST, 
+            consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public void addForm(@RequestBody Form form) {
         int customerId = customerService.addCustomer(form.getCustomer());
         int orderId = orderService.addOrder(form.getOrder());
@@ -49,13 +45,13 @@ public class FormController {
     }
     
     @RequestMapping(value="/{id}", method = RequestMethod.GET, 
-            produces = MediaType.APPLICATION_XML_VALUE)
+            produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public Form getFormById(@PathVariable("id") int id) {
         return formService.getFormById(id);
     }
     
     @RequestMapping(method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_XML_VALUE)
+            produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public EntityList<Form> getForms() {
         return new EntityList<>(formService.getForms());
     }

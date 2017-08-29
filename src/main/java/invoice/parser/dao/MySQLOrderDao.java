@@ -1,17 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package invoice.parser.dao;
 
-import invoice.parser.dao.interfaces.IOrderDao;
 import invoice.parser.entity.Form;
 import invoice.parser.entity.Form.Order;
 import invoice.parser.entity.Invoice;
 import invoice.parser.entity.ObjectFactory;
 import invoice.parser.util.Constants;
-import invoice.parser.util.MySQLHelper;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -39,7 +32,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
  */
 @Repository
 @Qualifier("MySQLOrder")
-public class MySQLOrderDao implements IOrderDao {
+public class MySQLOrderDao implements OrderDao {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(MySQLOrderDao.class);
     
@@ -49,12 +42,12 @@ public class MySQLOrderDao implements IOrderDao {
     @Override
     public int addOrder(Order order) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        jdbcInsert.withTableName(MySQLHelper.ORDER_TABLE).usingGeneratedKeyColumns(MySQLHelper.ORDER_ID);
+        jdbcInsert.withTableName(TABLE_ORDER).usingGeneratedKeyColumns(ID);
         Map<String, Object> params = new HashMap<>();
-        params.put(MySQLHelper.ORDER_PRODUCT, order.getProduct());
-        params.put(MySQLHelper.ORDER_QUANTITY, order.getQuantity());
-        params.put(MySQLHelper.ORDER_UNIT_COST, order.getUnitCost());
-        params.put(MySQLHelper.ORDER_SHIPPING_DATE, order.getShippingDate().toGregorianCalendar().getTime());
+        params.put(PRODUCT, order.getProduct());
+        params.put(QUANTITY, order.getQuantity());
+        params.put(UNIT_COST, order.getUnitCost());
+        params.put(SHIPPING_DATE, order.getShippingDate().toGregorianCalendar().getTime());
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(params));
         LOGGER.info(order + " added successfully.", Constants.LOG_DATE_FORMAT.format(new Date()));
         return key.intValue();
@@ -66,17 +59,17 @@ public class MySQLOrderDao implements IOrderDao {
         Order order = objectFactory.createFormOrder();
         try {
             order = (Order) jdbcTemplate.queryForObject("SELECT * FROM " 
-                    + MySQLHelper.ORDER_TABLE + " WHERE " 
-                    + MySQLHelper.ORDER_ID + " = " + "'" + id + "'", 
+                    + TABLE_ORDER + " WHERE " 
+                    + ID + " = " + "'" + id + "'", 
                     (rs, rowNum) -> {
                         Order o = objectFactory.createFormOrder();
-                        o.setProduct(rs.getString(MySQLHelper.ORDER_PRODUCT));
-                        o.setQuantity(new BigInteger(String.valueOf(rs.getInt(MySQLHelper.ORDER_QUANTITY))));
-                        o.setUnitCost(new BigDecimal(String.valueOf(rs.getFloat(MySQLHelper.ORDER_UNIT_COST))));
+                        o.setProduct(rs.getString(PRODUCT));
+                        o.setQuantity(new BigInteger(String.valueOf(rs.getInt(QUANTITY))));
+                        o.setUnitCost(new BigDecimal(String.valueOf(rs.getFloat(UNIT_COST))));
                         // set gregorian calendar
                         try {
                             GregorianCalendar gc = new GregorianCalendar();
-                            gc.setTime(rs.getDate(MySQLHelper.ORDER_SHIPPING_DATE));
+                            gc.setTime(rs.getDate(SHIPPING_DATE));
                             XMLGregorianCalendar xmlgc;
                             xmlgc = DatatypeFactory
                                             .newInstance()
@@ -98,17 +91,17 @@ public class MySQLOrderDao implements IOrderDao {
         Invoice.IOrder iOrder = new Invoice.IOrder();
         try {
             iOrder = (Invoice.IOrder) jdbcTemplate.queryForObject("SELECT * FROM " 
-                    + MySQLHelper.ORDER_TABLE + " WHERE " 
-                    + MySQLHelper.ORDER_ID + " = " + "'" + id + "'", 
+                    + TABLE_ORDER + " WHERE " 
+                    + ID + " = " + "'" + id + "'", 
                     (rs, rowNum) -> {
                         Invoice.IOrder io = new Invoice.IOrder();
-                        io.setId(rs.getInt(MySQLHelper.ORDER_ID));
-                        io.setProduct(rs.getString(MySQLHelper.ORDER_PRODUCT));
-                        int quantity = rs.getInt(MySQLHelper.ORDER_QUANTITY);
-                        float unitCost = rs.getFloat(MySQLHelper.ORDER_UNIT_COST);
+                        io.setId(rs.getInt(ID));
+                        io.setProduct(rs.getString(PRODUCT));
+                        int quantity = rs.getInt(QUANTITY);
+                        float unitCost = rs.getFloat(UNIT_COST);
                         io.setTotalCost(quantity * unitCost);
                         io.setShippingDate(Constants.INVOICE_DATE_FORMAT.format(
-                                rs.getDate(MySQLHelper.ORDER_SHIPPING_DATE))
+                                rs.getDate(SHIPPING_DATE))
                         );
                         return io;
                     });
@@ -123,16 +116,16 @@ public class MySQLOrderDao implements IOrderDao {
         ObjectFactory objectFactory = new ObjectFactory();
         List<Form.Order> orders = new ArrayList<>();
         try {
-            orders = jdbcTemplate.query("SELECT * FROM " + MySQLHelper.ORDER_TABLE, 
+            orders = jdbcTemplate.query("SELECT * FROM " + TABLE_ORDER, 
                     (rs, rowNum) -> {
                         Order o = objectFactory.createFormOrder();
-                        o.setProduct(rs.getString(MySQLHelper.ORDER_PRODUCT));
-                        o.setQuantity(new BigInteger(String.valueOf(rs.getInt(MySQLHelper.ORDER_QUANTITY))));
-                        o.setUnitCost(new BigDecimal(String.valueOf(rs.getFloat(MySQLHelper.ORDER_UNIT_COST))));
+                        o.setProduct(rs.getString(PRODUCT));
+                        o.setQuantity(new BigInteger(String.valueOf(rs.getInt(QUANTITY))));
+                        o.setUnitCost(new BigDecimal(String.valueOf(rs.getFloat(UNIT_COST))));
                         // set gregorian calendar
                         try {
                             GregorianCalendar gc = new GregorianCalendar();
-                            gc.setTime(rs.getDate(MySQLHelper.ORDER_SHIPPING_DATE));
+                            gc.setTime(rs.getDate(SHIPPING_DATE));
                             XMLGregorianCalendar xmlgc;
                             xmlgc = DatatypeFactory
                                             .newInstance()

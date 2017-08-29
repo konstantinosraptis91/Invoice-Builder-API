@@ -1,16 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package invoice.parser.dao;
 
-import invoice.parser.dao.interfaces.ISupplierDao;
 import invoice.parser.entity.Form.Supplier;
 import invoice.parser.entity.Invoice;
 import invoice.parser.entity.ObjectFactory;
 import invoice.parser.util.Constants;
-import invoice.parser.util.MySQLHelper;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,7 +25,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @Qualifier("MySQLSupplier")
-public class MySQLSupplierDao implements ISupplierDao {
+public class MySQLSupplierDao implements SupplierDao {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(MySQLSupplierDao.class);
     
@@ -42,12 +35,12 @@ public class MySQLSupplierDao implements ISupplierDao {
     @Override
     public int addSupplier(Supplier supplier) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        jdbcInsert.withTableName(MySQLHelper.SUPPLIER_TABLE).usingGeneratedKeyColumns(MySQLHelper.SUPPLIER_ID);
+        jdbcInsert.withTableName(TABLE_SUPPLIER).usingGeneratedKeyColumns(ID);
         Map<String, Object> params = new HashMap<>();
-        params.put(MySQLHelper.SUPPLIER_FULL_NAME, supplier.getFullName());
-        params.put(MySQLHelper.SUPPLIER_ADDRESS, supplier.getAddress());
-        params.put(MySQLHelper.SUPPLIER_PHONE_NUMBER, supplier.getPhoneNumber());
-        params.put(MySQLHelper.SUPPLIER_EMAIL, supplier.getEmail());
+        params.put(FULL_NAME, supplier.getFullName());
+        params.put(ADDRESS, supplier.getAddress());
+        params.put(PHONE_NUMBER, supplier.getPhoneNumber());
+        params.put(EMAIL, supplier.getEmail());
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(params));
         LOGGER.info(supplier + " added successfully.", Constants.LOG_DATE_FORMAT.format(new Date()));
         return key.intValue();
@@ -59,14 +52,14 @@ public class MySQLSupplierDao implements ISupplierDao {
         Supplier supplier = objectFactory.createFormSupplier();
         try {
             supplier = (Supplier) jdbcTemplate.queryForObject("SELECT * FROM " 
-                    + MySQLHelper.SUPPLIER_TABLE + " WHERE " 
-                    + MySQLHelper.SUPPLIER_ID + " = " + "'" + id + "'", 
+                    + TABLE_SUPPLIER + " WHERE " 
+                    + ID + " = " + "'" + id + "'", 
                     (rs, rowNum) -> {
                         Supplier s = objectFactory.createFormSupplier();
-                        s.setFullName(rs.getString(MySQLHelper.SUPPLIER_FULL_NAME));
-                        s.setAddress(rs.getString(MySQLHelper.SUPPLIER_ADDRESS));
-                        s.setPhoneNumber(rs.getString(MySQLHelper.SUPPLIER_PHONE_NUMBER));
-                        s.setEmail(rs.getString(MySQLHelper.SUPPLIER_EMAIL));
+                        s.setFullName(rs.getString(FULL_NAME));
+                        s.setAddress(rs.getString(ADDRESS));
+                        s.setPhoneNumber(rs.getString(PHONE_NUMBER));
+                        s.setEmail(rs.getString(EMAIL));
                         return s;
                     });
         } catch (DataAccessException e) {
@@ -80,15 +73,15 @@ public class MySQLSupplierDao implements ISupplierDao {
         Invoice.ISupplier iSupplier = new Invoice.ISupplier();
         try {
             iSupplier = (Invoice.ISupplier) jdbcTemplate.queryForObject("SELECT * FROM " 
-                    + MySQLHelper.SUPPLIER_TABLE + " WHERE " 
-                    + MySQLHelper.SUPPLIER_ID + " = " + "'" + id + "'", 
+                    + TABLE_SUPPLIER + " WHERE " 
+                    + ID + " = " + "'" + id + "'", 
                     (rs, rowNum) -> {
                         Invoice.ISupplier is = new Invoice.ISupplier();
-                        is.setId(rs.getInt(MySQLHelper.SUPPLIER_ID));
-                        is.setFullName(rs.getString(MySQLHelper.SUPPLIER_FULL_NAME));
-                        is.setAddress(rs.getString(MySQLHelper.SUPPLIER_ADDRESS));
-                        is.setPhoneNumber(rs.getString(MySQLHelper.SUPPLIER_PHONE_NUMBER));
-                        is.setEmail(rs.getString(MySQLHelper.SUPPLIER_EMAIL));
+                        is.setId(rs.getInt(ID));
+                        is.setFullName(rs.getString(FULL_NAME));
+                        is.setAddress(rs.getString(ADDRESS));
+                        is.setPhoneNumber(rs.getString(PHONE_NUMBER));
+                        is.setEmail(rs.getString(EMAIL));
                         return is;
                     });
         } catch (DataAccessException e) {
@@ -102,13 +95,13 @@ public class MySQLSupplierDao implements ISupplierDao {
         ObjectFactory objectFactory = new ObjectFactory();
         List<Supplier> suppliers = new ArrayList<>();
         try {
-            suppliers = jdbcTemplate.query("SELECT * FROM " + MySQLHelper.SUPPLIER_TABLE, 
+            suppliers = jdbcTemplate.query("SELECT * FROM " + TABLE_SUPPLIER, 
                     (rs, rowNum) -> {
                         Supplier s = objectFactory.createFormSupplier();
-                        s.setFullName(rs.getString(MySQLHelper.SUPPLIER_FULL_NAME));
-                        s.setAddress(rs.getString(MySQLHelper.SUPPLIER_ADDRESS));
-                        s.setPhoneNumber(rs.getString(MySQLHelper.SUPPLIER_PHONE_NUMBER));
-                        s.setEmail(rs.getString(MySQLHelper.SUPPLIER_EMAIL));
+                        s.setFullName(rs.getString(FULL_NAME));
+                        s.setAddress(rs.getString(ADDRESS));
+                        s.setPhoneNumber(rs.getString(PHONE_NUMBER));
+                        s.setEmail(rs.getString(EMAIL));
                         return s;
                     });
         } catch (DataAccessException e) {
