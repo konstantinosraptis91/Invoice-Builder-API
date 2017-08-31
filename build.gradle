@@ -13,11 +13,11 @@ apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'application'
 
-mainClassName = 'invoice.parser.Application'
+mainClassName = 'invoice.creator.Application'
 
 jar {
-    baseName = 'Invoice-Parser'
-    version =  '0.1.0'
+    baseName = 'Invoice-Creator'
+    version =  '0.2.0'
 }
 
 repositories {
