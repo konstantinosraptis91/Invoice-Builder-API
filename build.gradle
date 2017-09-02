@@ -1,9 +1,14 @@
 buildscript {
     repositories {
+        jcenter()
         mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE")
+        classpath("gradle.plugin.org.openrepose:gradle-jaxb-plugin:2.2.3")
     }
 }
 
@@ -13,10 +18,20 @@ apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'application'
 
-mainClassName = 'invoice.creator.Application'
+mainClassName = 'invoice.builder.api.Application'
+
+def generatedDir = "${project.buildDir}/generated-sources/xjc"
+
+sourceSets {
+    main {
+        java {
+            srcDirs += "$generatedDir"
+        }
+    }
+}
 
 jar {
-    baseName = 'Invoice-Creator'
+    baseName = 'Invoice-Builder-API'
     version =  '0.2.0'
 }
 
@@ -27,11 +42,31 @@ repositories {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+apply plugin: 'org.openrepose.gradle.plugins.jaxb'
+
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-thymeleaf") 
     compile("org.springframework.boot:spring-boot-devtools")
     compile("org.springframework.boot:spring-boot-configuration-processor")
     compile("org.springframework.boot:spring-boot-starter-jdbc")
     compile("mysql:mysql-connector-java:5.1.38")
+    
+    jaxb "com.sun.xml.bind:jaxb-core:2.2.11"
+    jaxb "com.sun.xml.bind:jaxb-xjc:2.2.11"
+    jaxb "com.sun.xml.bind:jaxb-impl:2.2.11"
+    jaxb "javax.xml.bind:jaxb-api:2.2.11"
+    
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
+
+jaxb {
+    xsdDir = "${project.projectDir}/src/main/resources/schema"
+    
+    xjc {
+        destinationDir = "${project.buildDir}/generated-sources/xjc"
+        generatePackage = "order.form.dto"
+        args = ["-verbose"]
+    }
+}
+
+compileJava.dependsOn xjc

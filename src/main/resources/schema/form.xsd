@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="order:form:dto" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	
+    <xs:element name="form">
+        <xs:complexType>
+            <xs:sequence>
+                <!-- CUSTOMER ELEMENT -->
+                <xs:element name="customer">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="fullName" type="xs:string"/>
+                            <xs:element name="address" type="xs:string"/>
+                            <xs:element name="phoneNumber" type="xs:string"/>
+                            <xs:element name="email" type="xs:string"/>
+                        </xs:sequence>	
+                        <xs:attribute name="id" type="xs:integer"/>
+                    </xs:complexType>
+                </xs:element>
+                <!-- ORDER ELEMENT -->
+                <xs:element name="order">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="product" type="xs:string"/>
+                            <xs:element name="quantity" type="xs:positiveInteger"/>
+                            <xs:element name="unitCost" type="xs:decimal"/>
+                            <xs:element name="shippingDate" type="xs:date"/>
+                        </xs:sequence>
+                        <xs:attribute name="id" type="xs:integer"/>
+                    </xs:complexType>
+                </xs:element>
+                <!-- SUPPLIER ELEMENT -->
+                <xs:element name="supplier">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="fullName" type="xs:string"/>
+                            <xs:element name="address" type="xs:string"/>
+                            <xs:element name="phoneNumber" type="xs:string"/>
+                            <xs:element name="email" type="xs:string"/>
+                        </xs:sequence>
+                        <xs:attribute name="id" type="xs:integer"/>
+                    </xs:complexType>
+                </xs:element>
+                <!-- TRANSPORTER ELEMENT -->
+                <xs:element name="transporter">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="name" type="xs:string"/>
+                            <xs:element name="address" type="xs:string"/>
+                            <xs:element name="phoneNumber" type="xs:string"/>
+                            <xs:element name="email" type="xs:string"/>
+                        </xs:sequence>
+                        <xs:attribute name="id" type="xs:integer"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:integer"/>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
